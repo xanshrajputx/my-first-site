@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Premium Calculator</title>
+    <style>
+        /* Android 13 Material You Theme Colors */
+        :root {
+            --bg-color: #121414;
+            --surface-color: #1a1c1e;
+            --button-num: #2c2e31;
+            --button-op: #004d40;
+            --text-color: #e2e2e6;
+            --accent-color: #33b5e5;
+            --clear-color: #5c0000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            animation: appLaunch 0.5s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+
+        @keyframes appLaunch {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Smart Device Banner */
+        .device-info {
+            font-size: 13px;
+            color: #8a9199;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeIn 1s ease-in;
+        }
+
+        /* Ultra-Clean App Container */
+        .calculator {
+            background: var(--surface-color);
+            padding: 20px;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+        }
+
+        /* InstallerX Style Rounded Display */
+        #screen {
+            width: 100%;
+            height: 80px;
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 36px;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        /* Ultra-Smooth Android 13 Ripple Buttons */
+        button {
+            padding: 20px;
+            font-size: 22px;
+            background-color: var(--button-num);
+            color: var(--text-color);
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s ease, background-color 0.2s ease, border-radius 0.3s ease;
+        }
+
+        button:hover {
+            filter: brightness(1.15);
+        }
+
+        /* Material You Scale Down & Morph on Click */
+        button:active {
+            transform: scale(0.92);
+            border-radius: 16px;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* System Operators UI Color */
+        .operator {
+            background-color: var(--button-op);
+            color: #a7f3d0;
+        }
+
+        .clear {
+            background-color: var(--clear-color);
+            color: #ffcdcd;
+        }
+
+        .backspace {
+            background-color: #4a3b00;
+            color: #ffe082;
+        }
+
+        .equal {
+            grid-column: span 2;
+            background-color: var(--accent-color);
+            color: #00364d;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Smart Banner -->
+    <div class="device-info" id="device-tag">Detecting Device System...</div>
+
+    <div class="calculator">
+        <!-- Display Screen -->
+        <input type="text" id="screen" readonly placeholder="0">
+        
+        <!-- Premium UI Buttons -->
+        <div class="buttons">
+            <button class="clear" onclick="clearScreen()">C</button>
+            <button class="backspace" onclick="backspace()">⌫</button>
+            <button class="operator" onclick="press('/')">÷</button>
+            <button class="operator" onclick="press('*')">×</button>
+            
+            <button onclick="press('7')">7</button>
+            <button onclick="press('8')">8</button>
+            <button onclick="press('9')">9</button>
+            <button class="operator" onclick="press('-')">−</button>
+            
+            <button onclick="press('4')">4</button>
+            <button onclick="press('5')">5</button>
+            <button onclick="press('6')">6</button>
+            <button class="operator" onclick="press('+')">+</button>
+            
+            <button onclick="press('1')">1</button>
+            <button onclick="press('2')">2</button>
+            <button onclick="press('3')">3</button>
+            <button class="equal" onclick="calculate()">=</button>
+            
+            <button style="grid-column: span 4;" onclick="press('0')">0</button>
+        </div>
+    </div>
+
+    <script>
+        const screen = document.getElementById('screen');
+
+        // Dynamic System Architecture Detection
+        window.onload = function() {
+            let userAgent = navigator.userAgent;
+            let deviceTag = document.getElementById('device-tag');
+            
+            if (/android/i.test(userAgent)) {
+                // Tries to clean out the Android build info to show phone type safely
+                let match = userAgent.match(/Android\s+([^\s;]+);\s+([^;)]+)/);
+                if (match && match[2]) {
+                    deviceTag.innerText = "📱 Optimized For: " + match[2].trim();
+                } else {
+                    deviceTag.innerText = "📱 Android System Core Active";
+                }
+            } else {
+                deviceTag.innerText = "💻 Web System Engine Active";
+            }
+        };
+
+        function press(num) {
+            if (screen.value === 'Error') screen.value = '';
+            screen.value += num;
+        }
+
+        function clearScreen() {
+            screen.value = '';
+        }
+
+        function backspace() {
+            screen.value = screen.value.slice(0, -1);
+        }
+
+        function calculate() {
+            try {
+                if (screen.value) {
+                    let result = eval(screen.value);
+                    screen.value = Number(result.toFixed(4)); 
+                }
+            } catch (err) {
+                screen.value = 'Error';
+            }
+        }
+    </script>
+
+</body>
+</html>
