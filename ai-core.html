@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -80,15 +80,21 @@
             display: flex;
             gap: 10px;
         }
+        /* Mobile Keyboard Open Friendly Input Box */
         input {
             flex: 1;
             padding: 14px;
             background: #2c3136;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 25px;
             color: white;
             outline: none;
-            font-size: 15px;
+            font-size: 16px; /* 16px blocks auto-zoom on mobile safari/chrome */
+            -webkit-appearance: none;
+        }
+        input:focus {
+            border-color: var(--accent);
+            background: #343a40;
         }
         button {
             background: var(--accent);
@@ -108,10 +114,11 @@
     <div class="app-container">
         <div class="header">🤖 AI CORE SYSTEM</div>
         <div class="chat-area" id="chatBox">
-            <div class="bubble ai">Hello! System online. Main aapka personal AI Assistant hoon. Kuch bhi puchiye!</div>
+            <div class="bubble ai">Hello! System online. Main aapka personal AI Assistant hoon. Ab check kijiye, keyboard mast khulega! 😉</div>
         </div>
         <div class="input-area">
-            <input type="text" id="userInput" placeholder="Type a message...">
+            <!-- Normal Text input without restriction -->
+            <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off">
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
@@ -124,7 +131,6 @@
             let text = userInput.value.trim();
             if (!text) return;
 
-            // User Message
             let userDiv = document.createElement('div');
             userDiv.className = 'bubble user';
             userDiv.innerText = text;
@@ -132,19 +138,20 @@
             userInput.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Simulated AI Brain Logic
+            // Instantly refocus input after click to keep keyboard up
+            userInput.focus();
+
             setTimeout(() => {
                 let aiDiv = document.createElement('div');
                 aiDiv.className = 'bubble ai';
                 
-                // Smart Local Answers
                 let reply = "Mera AI system abhi seekh raha hai. Aapne kaha: '" + text + "'";
                 if(text.toLowerCase().includes('hello') || text.toLowerCase().includes('hi')) {
-                    reply = "Hey there! Kahiye, aaj hum kya launch karne wale hain? 😎";
+                    reply = "Hey there Ansh! Kahiye, ab toh keyboard mast chal raha hai na? 😎🚀";
                 } else if(text.toLowerCase().includes('kaise ho')) {
-                    reply = "Main ek dum dhasu hoon! Aap batao, aapka project kaisa chal raha hai?";
+                    reply = "Main ek dum makhhan chal rahi hoon! Aap batao!";
                 } else if(text.toLowerCase().includes('naam')) {
-                    reply = "Mera naam AI Core System hai, jise aapne design kiya hai!";
+                    reply = "Mera naam AI Core System hai!";
                 }
                 
                 aiDiv.innerText = reply;
@@ -153,7 +160,6 @@
             }, 800);
         }
 
-        // Enter key support
         userInput.addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 sendMessage();
