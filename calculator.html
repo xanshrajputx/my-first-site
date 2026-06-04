@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ansh Ka Ultra-Smooth Calculator</title>
+    <style>
+        /* Global Styles & Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #050505;
+            color: #00ff66;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            /* Smooth page entry animation */
+            animation: fadeInPage 0.6s ease-out;
+        }
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
+        }
+
+        /* Calculator Container */
+        .calculator {
+            background: #121212;
+            padding: 24px;
+            border-radius: 18px;
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 102, 0.1);
+            width: 100%;
+            max-width: 340px;
+        }
+
+        /* Display Screen with Smooth Text */
+        #screen {
+            width: 100%;
+            height: 65px;
+            background-color: #1a1a1a;
+            border: 1px solid rgba(0, 255, 102, 0.3);
+            color: #00ff66;
+            font-size: 28px;
+            text-align: right;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            outline: none;
+            text-shadow: 0 0 5px rgba(0, 255, 102, 0.3);
+            transition: all 0.3s ease;
+        }
+        #screen:focus {
+            border-color: #00ff66;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+        }
+
+        /* Grid Layout for Buttons */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        /* Ultra-Smooth Button Animation Styling */
+        button {
+            padding: 18px;
+            font-size: 20px;
+            background-color: #1c1c1c;
+            color: #00ff66;
+            border: 1px solid rgba(0, 255, 102, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            /* Smooth Transition Effect */
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        /* Button Hover & Tap Effects */
+        button:hover {
+            background-color: rgba(0, 255, 102, 0.08);
+            border-color: #00ff66;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 255, 102, 0.15);
+        }
+        button:active {
+            transform: translateY(1px) scale(0.95);
+            background-color: #00ff66;
+            color: #000;
+            box-shadow: 0 0 8px #00ff66;
+        }
+
+        /* Operator and Special Buttons Design */
+        .clear {
+            grid-column: span 2;
+            background-color: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
+            border-color: rgba(255, 59, 48, 0.2);
+        }
+        .clear:hover {
+            background-color: rgba(255, 59, 48, 0.2);
+            border-color: #ff3b30;
+            box-shadow: 0 4px 10px rgba(255, 59, 48, 0.2);
+        }
+        .clear:active {
+            background-color: #ff3b30;
+            color: #fff;
+            box-shadow: 0 0 8px #ff3b30;
+        }
+
+        .equal {
+            grid-column: span 2;
+            background-color: rgba(0, 255, 102, 0.1);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🧮 Ansh's Calculator</h2>
+
+    <div class="calculator">
+        <!-- Input Screen -->
+        <input type="text" id="screen" readonly placeholder="0">
+        
+        <!-- Interactive Buttons -->
+        <div class="buttons">
+            <button class="clear" onclick="clearScreen()">C</button>
+            <button onclick="press('/')">÷</button>
+            <button onclick="press('*')">×</button>
+            
+            <button onclick="press('7')">7</button>
+            <button onclick="press('8')">8</button>
+            <button onclick="press('9')">9</button>
+            <button onclick="press('-')">−</button>
+            
+            <button onclick="press('4')">4</button>
+            <button onclick="press('5')">5</button>
+            <button onclick="press('6')">6</button>
+            <button onclick="press('+')">+</button>
+            
+            <button onclick="press('1')">1</button>
+            <button onclick="press('2')">2</button>
+            <button onclick="press('3')">3</button>
+            <button class="equal" onclick="calculate()">=</button>
+            
+            <button style="grid-column: span 4;" onclick="press('0')">0</button>
+        </div>
+    </div>
+
+    <!-- Background Logic Operations -->
+    <script>
+        const screen = document.getElementById('screen');
+
+        function press(num) {
+            if (screen.value === 'Error') screen.value = '';
+            screen.value += num;
+        }
+
+        function clearScreen() {
+            screen.value = '';
+        }
+
+        function calculate() {
+            try {
+                if (screen.value) {
+                    // Safe evaluation mapping and optimized rounding
+                    let result = eval(screen.value);
+                    screen.value = Number(result.toFixed(4)); 
+                }
+            } catch (err) {
+                screen.value = 'Error';
+            }
+        }
+    </script>
+
+</body>
+</html>
